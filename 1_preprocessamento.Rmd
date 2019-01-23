@@ -1,0 +1,56 @@
+---
+title: "Untitled"
+author: "Carlos Kauê Vieira Braga"
+date: "January 23, 2019"
+output: html_document
+---
+
+Esse arquivo tem como objetivo estabelecer um passo a passo para o pré-processamento de dados de bilhetagem eletrônica do transporte público de Fortaleza. 
+
+Inicialmente é necessário carregar todos os pacotes que vão ser utilizados. É necessário, na primeira vez, instalar os pacotes:
+
+```{r instalar pacotes}
+
+install.packages(c("readr", "dplyr", "tidyr"))
+
+```
+
+Após isso é feito o carregamento dos pacotes instalados:
+
+```{r abrir pacotes}
+
+# para abrir arquivos
+library(readr)
+
+# para manipular dados  
+library(dplyr) 
+library(tidyr)
+
+```
+
+# Abrir arquivo
+
+Para abrir o arquivo de bilhetagem é utilizada a função ``read_csv`` do pacote ``readr``:
+
+```{r abrir arquivo}
+
+# chamar o arquivo de "bilhetagem"
+bilhetagem <- read_csv("data/bilhetagemintegrado_2015-03-03.csv")
+
+DT::datatable(head(bilhetagem))
+
+```
+
+A tabela acima dá uma amostra das colunas presentes no arquivo da bilhetagem já referenciado (com adição das colunas lon e lat). Algumas colunas apresentam informações duplicadas, como o número da linha (``linha``) e o nome da linha (``nome_linha``). Para selecionar as colunas de interesse, utiliza-se a função ``select`` do pacote ``dplyr``:
+
+```{r selecionar colunas}
+
+# as mudanças serão feitas no data.frame "bilhetagem", e serão salvas no data.frame "bilhetagem_v1"
+bilhetagem_v1 <- bilhetagem %>%
+  # separar, por virgula, o nome das colunas desejadas
+  select(id, hora, vehicleid, hora, linha, tipo_cartao, sentido_viagem, integracao, lat, lon)
+
+DT::datatable(head(bilhetagem_v1))
+
+```
+
